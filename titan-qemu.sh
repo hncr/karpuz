@@ -1,0 +1,14 @@
+/usr/libexec/qemu-kvm -name titan \
+		-pidfile /tmp/titan.pid \
+		-cpu host -enable-kvm \
+		-smp 4,sockets=1,cores=4,threads=1 \
+		-m 6G \
+		-drive format=raw,file=/mnt/titan.img,if=ide,media=disk \
+		-machine type=pc,accel=kvm \
+		-vga none \
+		-device vfio-pci,host=01:00.0,multifunction=on,romfile=174798.rom\
+		-device vfio-pci,host=01:00.1 \
+       		-vga qxl -spice port=3001,disable-ticketing -soundhw hda \
+		-device virtio-serial -chardev spicevmc,id=vdagent,debug=0,name=vdagent \
+		-device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
+	        -usbdevice tablet
